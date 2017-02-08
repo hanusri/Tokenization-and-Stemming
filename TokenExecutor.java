@@ -37,18 +37,31 @@ public class TokenExecutor {
                     while ((line = bufferedReader.readLine()) != null) {
                         StringTokenizer tokenizer = new StringTokenizer(line, Constants.TOKENIZER_SPLIT);
                         while (tokenizer.hasMoreTokens()) {
-                            String word = tokenizer.nextToken();
-                            // remove words which are xml tags or just numbers
-                            if (word.matches("<[^>]+>") || word.matches("(\\d)*"))
-                                continue;
+                            String word = tokenizer.nextToken().trim().toLowerCase();
 
-                            
+                            String[] subWords = word.split("\\s+|\\/|\\\\|\\-|\\_");
 
+                            for (String subWord : subWords) {
+                                if (word.isEmpty())
+                                    continue;
 
+                                // remove words which are xml tags or just numbers or just symbols
+                                if (subWord.matches("<[^>]+>") || subWord.matches("(\\d)*") || subWord.matches("[^\\w\\s]+"))
+                                    continue;
+
+                                // handle the 's by spliting the part and taking the actual work
+                                if (subWord.matches("(.*)\\'s"))
+                                    subWord.replace("'s", "");
+
+                                tokenSummary.addToDictionary(word);
+                            }
                         }
                     }
                 }
             }
+
+            tokenSummary.printStatistics();
+
         } catch (Exception ex) {
             System.out.println(ex.getCause());
         }
