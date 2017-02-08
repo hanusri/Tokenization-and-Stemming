@@ -10,6 +10,7 @@ public class TokenSummary {
     private int tokenCount;
     private int uniqueCount;
     private int onlyOccuranceCount;
+    private int documentCount;
     private float avgTokens;
     private HashMap<String, Integer> tokenMap;
 
@@ -27,10 +28,6 @@ public class TokenSummary {
 
     public int getTokenCount() {
         return tokenCount;
-    }
-
-    public void setTokenCount(int tokenCount) {
-        this.tokenCount = tokenCount;
     }
 
     public int getUniqueCount() {
@@ -59,6 +56,22 @@ public class TokenSummary {
 
     public HashMap<String, Integer> getTokenMap() {
         return tokenMap;
+    }
+
+    public int getDocumentCount() {
+        return documentCount;
+    }
+
+    //  endregion
+
+    // region Public Methods
+
+    public void incrementTokenCount() {
+        this.tokenCount++;
+    }
+
+    public void incrementDocumentCount() {
+        this.documentCount++;
     }
 
     //  endregion
