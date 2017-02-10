@@ -13,7 +13,7 @@ public class TokenExecutor {
     public TokenExecutor(TokenSummary tokenSummary, File[] listFiles) {
         this.tokenSummary = tokenSummary;
         lstFiles = listFiles;
-        processFile();
+        processFiles();
     }
 
     // endregion
@@ -37,23 +37,27 @@ public class TokenExecutor {
                     while ((line = bufferedReader.readLine()) != null) {
                         StringTokenizer tokenizer = new StringTokenizer(line, Constants.TOKENIZER_SPLIT);
                         while (tokenizer.hasMoreTokens()) {
-                            String word = tokenizer.nextToken().trim().toLowerCase();
 
-                            String[] subWords = word.split("\\s+|\\/|\\\\|\\-|\\_");
+                            String word = tokenizer.nextToken().trim().toLowerCase();
+                            // remove words which are xml tags
+                            if (word.matches("<[^>]+>") || word.matches("<\\/[^>]+>"))
+                                continue;
+                            // split the word if it has - or _ or white spaces like tab or \n
+                            String[] subWords = word.split("\\s+|\\-|\\_");
 
                             for (String subWord : subWords) {
-                                if (word.isEmpty())
+                                if (subWord.isEmpty())
                                     continue;
 
-                                // remove words which are xml tags or just numbers or just symbols
-                                if (subWord.matches("<[^>]+>") || subWord.matches("(\\d)*") || subWord.matches("[^\\w\\s]+"))
+                                // remove workds which are just numbers or just symbols
+                                if ( subWord.matches("(\\d)*") || subWord.matches("[^\\w\\s]+"))
                                     continue;
 
                                 // handle the 's by spliting the part and taking the actual work
                                 if (subWord.matches("(.*)\\'s"))
                                     subWord.replace("'s", "");
 
-                                tokenSummary.addToDictionary(word);
+                                tokenSummary.addToDictionary(subWord);
                             }
                         }
                     }
@@ -67,9 +71,6 @@ public class TokenExecutor {
         }
     }
 
-    private void processFile() {
-
-    }
 
     //endregion
 }

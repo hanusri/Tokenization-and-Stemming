@@ -9,11 +9,11 @@ public class ApplicationRunner {
         if (args.length != 1)
             System.out.println("Please provide valid dataset path");
         else {
-
+            processFile(args[0]);
         }
     }
 
-    private void processFile(String directoryPath) {
+    private static void processFile(String directoryPath) {
         // get the list of files
         File[] lstFiles = Utility.getFiles(directoryPath);
 
@@ -21,7 +21,7 @@ public class ApplicationRunner {
             System.out.println("Error loading the directory");
         else {
             TokenSummary tokenSummary = new TokenSummary();
-            TokenExecutor tokenExecutor = new TokenExecutor(tokenSummary,lstFiles);
+            TokenExecutor tokenExecutor = new TokenExecutor(tokenSummary, lstFiles);
 
         }
     }
