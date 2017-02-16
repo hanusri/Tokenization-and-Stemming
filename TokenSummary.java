@@ -12,6 +12,7 @@ public class TokenSummary {
     private int onlyOccuranceCount;
     private int documentCount;
     private HashMap<String, Integer> tokenMap;
+    private long timeTake;
 
     // endregion
 
@@ -45,6 +46,26 @@ public class TokenSummary {
         return documentCount;
     }
 
+    public void setTokenMap(HashMap<String, Integer> tokenMap) {
+        this.tokenMap = tokenMap;
+    }
+
+    public void setDocumentCount(int documentCount) {
+        this.documentCount = documentCount;
+    }
+
+    public void setTokenCount(int tokenCount) {
+        this.tokenCount = tokenCount;
+    }
+
+    public long getTimeTake() {
+        return timeTake;
+    }
+
+    public void setTimeTake(long timeTake) {
+        this.timeTake = timeTake;
+    }
+
     //  endregion
 
     // region Public Methods
@@ -52,6 +73,10 @@ public class TokenSummary {
 
     public double getAvgTokens() {
         return tokenCount / documentCount;
+    }
+
+    public double getAvgUniqueTokens() {
+        return tokenMap.size() / documentCount;
     }
 
     public void incrementTokenCount() {
@@ -77,11 +102,12 @@ public class TokenSummary {
 
     public void printStatistics() {
 
-
+        System.out.println("Time Take to process: " + timeTake + " ms");
         System.out.println("Number of tokens in Cranfield Collection: " + tokenCount);
         System.out.println("Number of unique tokens in Cranfield Collection: " + tokenMap.size());
         System.out.println("Number of tokens that occur only once: " + onlyOccuranceCount);
-        System.out.println("Average number of word tokens per document: " + getAvgTokens());
+        System.out.println("Average number of TOTAL word tokens per document: " + getAvgTokens());
+        System.out.println("Average number of UNIQUE word tokens per document: " + getAvgUniqueTokens());
         System.out.println("Number of documents scanned: " + documentCount);
 
         Map<String, Integer> sortedMapValue = Utility.sortMap(tokenMap);

@@ -20,9 +20,14 @@ public class ApplicationRunner {
         if (lstFiles.length == 0)
             System.out.println("Error loading the directory");
         else {
+            System.out.println("Tokenization Analysis of Documents");
+            System.out.println("----------------------------------");
             TokenSummary tokenSummary = new TokenSummary();
             TokenExecutor tokenExecutor = new TokenExecutor(tokenSummary, lstFiles);
-
+            System.out.println("Stemming Analysis of Documents");
+            System.out.println("------------------------------");
+            StemmingExecutor stemmingExecutor = new StemmingExecutor(tokenSummary);
+            stemmingExecutor.processStemming();
         }
     }
 }

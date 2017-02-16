@@ -24,6 +24,7 @@ public class TokenExecutor {
         FileInputStream fis = null;
         DataInputStream dis = null;
         BufferedReader bufferedReader = null;
+        long startTime = System.currentTimeMillis();
         try {
             for (File file : lstFiles) {
                 if (file.isFile()) {
@@ -42,20 +43,24 @@ public class TokenExecutor {
                             // remove words which are xml tags
                             if (word.matches("<[^>]+>") || word.matches("<\\/[^>]+>"))
                                 continue;
+
+
                             // split the word if it has - or _ or white spaces like tab or \n
-                            String[] subWords = word.split("\\s+|\\-|\\_");
+                            String[] subWords = word.split("\\s+|\\-|\\_|\\(|\\)|\\,|\\\\|\\/");
 
                             for (String subWord : subWords) {
-                                if (subWord.isEmpty())
+
+                                if (subWord.trim().isEmpty())
                                     continue;
 
                                 // remove workds which are just numbers or just symbols
-                                if ( subWord.matches("(\\d)*") || subWord.matches("[^\\w\\s]+"))
+                                if (subWord.matches("(\\d)*") || subWord.matches("(\\d)*.") || subWord.matches("(\\d)*.(\\d)*") ||
+                                        subWord.matches("[^\\w\\s]+"))
                                     continue;
 
                                 // handle the 's by spliting the part and taking the actual work
                                 if (subWord.matches("(.*)\\'s"))
-                                    subWord.replace("'s", "");
+                                    subWord = subWord.replace("'s", "");
 
                                 tokenSummary.addToDictionary(subWord);
                             }
@@ -63,7 +68,8 @@ public class TokenExecutor {
                     }
                 }
             }
-
+            long endTime = System.currentTimeMillis();
+            tokenSummary.setTimeTake(endTime - startTime);
             tokenSummary.printStatistics();
 
         } catch (Exception ex) {
